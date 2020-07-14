@@ -22,7 +22,7 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-    @property
+    @property  # with this method we can use image by method url more effciently with relations models too
     def imageURL(self):
         try:
             url = self.image.url
@@ -44,7 +44,7 @@ class Order(models.Model):
     @property  # this method calculate total of the all items in cart
     def get_cart_total(self):
         ordered_items = self.orderitem_set.all()
-        total = sum([i.get_total_of_single_item for i in ordered_items])
+        total = sum(i.get_total_of_single_item() for i in ordered_items)
         return total
 
     @property  # same as above method but this tim quantity
@@ -64,7 +64,7 @@ class OrderItem(models.Model):
     # total for one particular item if it is one or more
     def get_total_of_single_item(self):
         total = self.product.price * self.quantity
-        return total
+        return int(total)
 
 
 class ShippingAddress(models.Model):

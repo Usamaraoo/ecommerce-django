@@ -7,5 +7,3 @@
         - Used property decorator on method in model
         - same use the views
 
-
-
