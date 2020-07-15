@@ -1,5 +1,5 @@
 from django.urls import path
-
+from django.http import JsonResponse
 from . import views
 
 urlpatterns = [
@@ -7,5 +7,6 @@ urlpatterns = [
     path('', views.store, name="store"),
     path('cart/', views.cart, name="cart"),
     path('checkout/', views.checkout, name="checkout"),
+    path('updateitem/', views.updateitem, name="checkout"),
 
 ]
