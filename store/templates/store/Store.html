@@ -1,7 +1,7 @@
 {% extends 'store/Main.html'%}
 {% load static%}
 {% block content %}
-
+<div class="container">
 <div class="row">
     {%for item in products%}
     <div class="col-lg-4">
@@ -9,11 +9,14 @@
         <div class="box-element product">
             <h6><strong>{{item.name}}</strong></h6>
             <hr>
-            <button data-product="{{item.name}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+        {% comment %} this data-product and data-action are
+         CUSTOME ATTRIBUTE for get the item id in js {% endcomment %}
+            <button data-product="{{item.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
             <a class="btn btn-outline-success" href="#">View</a>
-            <h4 style="display: inline-block; float: right"><strong>$20</strong></h4>
+            <h4 style="display: inline-block; float: right"><strong>${{ item.price }}</strong></h4>
         </div>
     </div>
         {%endfor%}
+    </div>
     </div>
 {% endblock content%}

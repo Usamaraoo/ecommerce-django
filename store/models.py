@@ -7,7 +7,7 @@ from django.db import models
 class Customer(models.Model):
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=200, null=True)
-    email = models.CharField(max_length=200)
+    email = models.EmailField(max_length=200)
 
     def __str__(self):
         return self.name
@@ -22,7 +22,7 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-    @property  # with this method we can use image by method url more effciently with relations models too
+    @property  # with this method we can use image by method url more efficiently with relations models otherwise if blank it will give error
     def imageURL(self):
         try:
             url = self.image.url
@@ -40,6 +40,15 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+    @property
+    def shipping(self):  # this method check if items in the order need shipping or digital
+        shipping = False
+        order_items = self.orderitem_set.all()
+        for i in order_items:
+            if i.product.digital is False:
+                shipping = True
+        return shipping
 
     @property  # this method calculate total of the all items in cart
     def get_cart_total(self):
