@@ -16,4 +16,4 @@
 3
 -java script part
 - javascript added event listner on buttons
-- added CUSTOME-ATTRIBUTE  on buttons through which we get the id and assigned action on that button
+- added CUSTOME-ATTRIBUTE  on buttons through which we get the id and assigned action on that button 
