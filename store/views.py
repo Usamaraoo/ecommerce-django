@@ -8,7 +8,6 @@ from .utils import cookieCart, cartData, guestOrder
 
 def store(request):
     data = cartData(request)
-
     cartItems = data['cartItems']
     order = data['order']
     items = data['items']
