@@ -33,7 +33,7 @@ def cookieCart(request):
             }
             items.append(item)
 
-            if product.digital == False:
+            if product.digital is False:
                 order['shipping'] = True
         except:
             pass
@@ -47,6 +47,13 @@ def cartData(request):
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
         cartItems = order.get_cart_items
+        # custom code to add item in ORDER for login user
+        for i in items:
+            p = Product.objects.get(name=i)
+            print('Product', Product.objects.get(id=p.id))
+            order.items_in_order.add(Product.objects.get(id=p.id))
+            print(order.id)
+            # ---------------
     else:
         cookieData = cookieCart(request)
         cartItems = cookieData['cartItems']
@@ -72,7 +79,13 @@ def guestOrder(request, data):
     order = Order.objects.create(
         customer=customer,
         complete=False,
+
     )
+    # customize code to show ordered product in Order
+    for i in items:
+        print('items', i['id'])
+        order.items_in_order.add(Product.objects.get(id=i['id']))
+    # ---------
 
     for item in items:
         product = Product.objects.get(id=item['id'])
@@ -80,5 +93,8 @@ def guestOrder(request, data):
             product=product,
             order=order,
             quantity=item['quantity'],
+            customer_name=Customer.objects.get(id=customer.id)  # custom added
         )
+
+        orderItem.save()
     return customer, order

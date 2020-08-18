@@ -4,18 +4,17 @@ for (i = 0; i < updateBtns.length; i++) {
 	updateBtns[i].addEventListener('click', function(){
 		var productId = this.dataset.product
 		var action = this.dataset.action
-		console.log('productId:', productId, 'Action:', action)
-		console.log('USER:', user)
+//		console.log('productId:', productId, 'Action:', action)
+		console.log('Customer:', user)
 
 		if (user == 'AnonymousUser'){
 			addCookieItem(productId, action)
 		}else{
-			updateUserOrder(productId, action)
+			updateUserOrder(productId, action,user)
 		}
 	})
 }
-
-function updateUserOrder(productId, action){
+function updateUserOrder(productId, action,u){
 	console.log('User is authenticated, sending data...')
 
 		var url = '/update_item/'
@@ -26,13 +25,14 @@ function updateUserOrder(productId, action){
 				'Content-Type':'application/json',
 				'X-CSRFToken':csrftoken,
 			},
-			body:JSON.stringify({'productId':productId, 'action':action})
+			body:JSON.stringify({'productId':productId, 'action':action,'user':u,})
 		})
 		.then((response) => {
 		   return response.json();
 		})
 		.then((data) => {
-		    location.reload()
+		console.log(data)
+		location.reload()
 		});
 }
 

@@ -5,9 +5,11 @@ from django.db import models
 # Create your models here.
 
 class Customer(models.Model):
-    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.DO_NOTHING)
     name = models.CharField(max_length=200, null=True)
     email = models.EmailField(max_length=200)
+
+    # orderedItems = models.ManyToManyField(ord)
 
     def __str__(self):
         return self.name
@@ -37,6 +39,7 @@ class Order(models.Model):
     date_order = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False, null=True, blank=True)
     transaction_id = models.CharField(max_length=200, null=True, blank=True)
+    items_in_order = models.ManyToManyField(Product, related_name='Order')
 
     def __str__(self):
         return str(self.id)
@@ -70,10 +73,15 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(default=0, null=True, blank=True)
     added = models.DateTimeField(auto_now_add=True)
 
+    customer_name = models.ForeignKey(Customer, on_delete=models.DO_NOTHING, blank=False)
+
     # total for one particular item if it is one or more
     def get_total_of_single_item(self):
         total = self.product.price * self.quantity
         return int(total)
+
+    def __str__(self):
+        return str(self.product)
 
 
 class ShippingAddress(models.Model):
