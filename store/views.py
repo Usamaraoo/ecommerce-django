@@ -4,6 +4,28 @@ import json
 import datetime
 from .models import *
 from .utils import cookieCart, cartData, guestOrder
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from .RegisterForm import RegisterForm
+
+
+# register user
+def register(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            email = form.cleaned_data['email']
+            name = form.cleaned_data['username']
+            user = User.objects.get(username=name)
+            # creating customer with created user other wise it will give error
+            customer = Customer.objects.create(email=email, name=name, user=user)
+            customer.save()
+        return redirect("/")
+    else:
+        form = RegisterForm()
+
+    return render(request, "registration/register.html", {"form": form})
 
 
 def store(request):
